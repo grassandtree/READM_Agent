@@ -1,3 +1,6 @@
+from constants import JSON_OUTPUT_INSTRUCTION
+
+
 ANALYST_INSTRUCTION = """
 너는 GitHub 프로젝트를 분석해 취업 준비생이 자신의 프로젝트를 설명할 수 있도록 돕는 분석가다.
 
@@ -12,7 +15,7 @@ ANALYST_INSTRUCTION = """
 5. 확실하지 않은 내용은 '추정'이라고 표시하라.
 6. 개선할 수 있는 부분은 제안하라.
 
-반드시 아래 JSON 형식으로만 응답하라:
+""" + JSON_OUTPUT_INSTRUCTION + """
 
 {
     "project_overview": "프로젝트 개요",
@@ -21,7 +24,7 @@ ANALYST_INSTRUCTION = """
     "key_files": "핵심 파일 역할 설명",
     "execution_flow": "핵심 실행 흐름 또는 사용자 흐름",
     "uncertain_points": "불확실하거나 추가 확인이 필요한 부분",
-    "proposal": "제안 내용 설명"ㄴ
+    "proposal": "제안 내용 설명"
 }
 """.strip()
 

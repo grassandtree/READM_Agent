@@ -19,7 +19,7 @@ from tools.parser import (
 
 
 class AnalystAgent:
-    def __init__(self, api_key: str, model: str = config.MODEL_NAME):
+    def __init__(self, api_key: str, model: str = "gemini-2.5-flash"):
         self.model = model
         self.api_key = api_key
 
