@@ -6,7 +6,7 @@ from tools.doc_gen import generate_readme, save_readme, validate_sections
 
 
 class WriterAgent:
-    def __init__(self, api_key: str | None = None, model: str = "gemini-2.5-flash", mode: str = "portfolio"):
+    def __init__(self, model: str, mode: str, api_key: str | None = None):
         self.model = model
         self.mode = mode
         self.api_key = api_key

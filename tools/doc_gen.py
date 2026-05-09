@@ -6,6 +6,8 @@ from typing import Any, Dict
 
 from google import genai
 from agents.prompts.doc_gen_prompt import build_prompt_from_project_data
+import config
+from constants import REQUIRED_README_SECTIONS
 
 
 def build_readme_prompt(project_data: Dict[str, Any], mode: str = "portfolio") -> str:
@@ -30,8 +32,8 @@ def clean_markdown(text: str) -> str:
 
 def generate_readme(
     project_data: Dict[str, Any],
-    model: str = "gemini-2.5-flash",
-    mode: str = "portfolio",
+    model: str,
+    mode: str,
     api_key: str | None = None,
 ) -> str:
     api_key = api_key or os.getenv("GEMINI_API_KEY")
@@ -53,7 +55,7 @@ def generate_readme(
     return clean_markdown(result)
 
 
-def save_readme(markdown_text: str, output_dir: str = "outputs", filename: str = "README.generated.md") -> str:
+def save_readme(markdown_text: str, output_dir: str = config.OUTPUT_DIR, filename: str = config.OUTPUT_FILENAME) -> str:
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
 
@@ -63,15 +65,4 @@ def save_readme(markdown_text: str, output_dir: str = "outputs", filename: str =
 
 
 def validate_sections(markdown_text: str) -> Dict[str, bool]:
-    required_sections = [
-        "프로젝트 소개",
-        "주요 기능",
-        "프로젝트 구조",
-        "핵심 파일 설명",
-        "기술 스택",
-        "시스템 아키텍처",
-        "실행 방법",
-        "기술 선택 이유",
-        "개선 방향"
-    ]
-    return {section: (section in markdown_text) for section in required_sections}
+    return {section: (section in markdown_text) for section in REQUIRED_README_SECTIONS}

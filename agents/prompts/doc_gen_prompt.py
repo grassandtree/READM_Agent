@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Dict
 
+from constants import MODE_TONES
+
 
 def build_doc_gen_prompt(
     project_name: str,
@@ -130,11 +132,7 @@ def build_prompt_from_project_data(project_data: Dict, mode: str = "portfolio") 
     else:
         tech_text = "- 정보 없음"
 
-    tone = {
-        "portfolio": "면접과 포트폴리오 제출에 적합한 README로 작성하세요.",
-        "beginner": "초보 개발자가 읽어도 이해하기 쉽게 설명하세요.",
-        "professional": "오픈소스 프로젝트 문서처럼 정돈된 형식으로 작성하세요.",
-    }.get(mode, "가독성 좋은 README로 작성하세요.")
+    tone = MODE_TONES.get(mode, "가독성 좋은 README로 작성하세요.")
 
     return build_doc_gen_prompt(
         project_name=project_name,

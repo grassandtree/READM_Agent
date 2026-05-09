@@ -1,6 +1,8 @@
 import os
 import json
+import argparse
 from dotenv import load_dotenv
+import config
 
 # 각 에이전트 클래스 임포트
 from agents.repo_manager import RepoManagerAgent
@@ -9,8 +11,6 @@ from agents.tech_expert import TechExpertAgent
 from agents.writers import WriterAgent
 
 def main():
-    load_dotenv()
-    
     github_token = os.getenv("MY_GITHUB_TOKEN")
     gemini_api_key = os.getenv("GEMINI_API_KEY")
         
@@ -18,23 +18,32 @@ def main():
         print("필수 API 키가 설정되지 않았습니다. .env 파일을 확인하세요.")
         return
         
-    TARGET_REPO = "grassandtree/READM_Agent"  ## treevia" # 분석 레포 설정
-    MODEL = "gemini-2.5-flash"
+    # argparse 설정
+    parser = argparse.ArgumentParser(description="README 생성 에이전트")
+    parser.add_argument("--repo", type=str, default=config.TARGET_REPO, help="분석할 깃허브 레포지토리 (예: user/repo)")
+    parser.add_argument("--model", type=str, default=config.MODEL, help="사용할 제미나이 모델")
+    parser.add_argument("--mode", type=str, default=config.MODE, choices=["professional", "portfolio", "beginner"], help="README 작성 모드")
+    
+    args = parser.parse_args()
 
-    print(f"[README 생성 에이전트] '{TARGET_REPO}' 분석을 시작합니다.\n")
+    config.TARGET_REPO = args.repo
+    config.MODEL = args.model
+    config.MODE = args.mode
+
+    print(f"[README 생성 에이전트] '{config.TARGET_REPO}' 분석을 시작합니다.\n")
 
     try:
         # 각 에이전트에 토큰 주입
-        repo_mgr = RepoManagerAgent(token=github_token, api_key=gemini_api_key, model=MODEL)
-        analyst = AnalystAgent(api_key=gemini_api_key, model=MODEL)
-        tech_exp = TechExpertAgent(api_key=gemini_api_key, model=MODEL)
-        writer = WriterAgent(api_key=gemini_api_key, model=MODEL, mode="professional")   ## portfolio")
+        repo_mgr = RepoManagerAgent(token=github_token, api_key=gemini_api_key, model=config.MODEL)
+        analyst = AnalystAgent(api_key=gemini_api_key, model=config.MODEL)
+        tech_exp = TechExpertAgent(api_key=gemini_api_key, model=config.MODEL)
+        writer = WriterAgent(api_key=gemini_api_key, model=config.MODEL, mode=config.MODE)
 
         # ---------------------------------------------------------
         # Step 1: RepoManager - 데이터 추출
         # ---------------------------------------------------------
         # 전체 트리 구조 파악 및 핵심 파일 내용 수집
-        project_data = repo_mgr.extract_project_data(TARGET_REPO)
+        project_data = repo_mgr.extract_project_data(config.TARGET_REPO)
         if project_data.get("status") == "fail":
             print(f"❌ 데이터 추출 실패: {project_data.get('error')}")
             return
@@ -88,7 +97,7 @@ def main():
         # Step 5: RepoManager - PR 생성 및 게시
         # ---------------------------------------------------------
         print("\n📤 깃허브에 Pull Request를 생성합니다...")
-        publish_result = repo_mgr.publish_readme(TARGET_REPO, final_readme)
+        publish_result = repo_mgr.publish_readme(config.TARGET_REPO, final_readme)
         
         if publish_result.get("status") == "success":
             print("\n" + "="*50)

@@ -4,6 +4,7 @@ import os
 from typing import Any, Dict
 
 from google import genai
+import config
 
 from agents.prompts.analyst_prompt import (
     ANALYST_INSTRUCTION,
@@ -18,7 +19,7 @@ from tools.parser import (
 
 
 class AnalystAgent:
-    def __init__(self, api_key: str, model: str = "gemini-2.5-flash"):
+    def __init__(self, api_key: str, model: str = config.MODEL_NAME):
         self.model = model
         self.api_key = api_key
 
