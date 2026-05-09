@@ -36,7 +36,7 @@ class RepoManagerAgent:
         """
         valid_extensions = (
             '.py', '.js', '.ts', '.java', '.html', '.css', '.md', '.json', '.toml', '.xml', '.yml', '.yaml',
-            '.ipynb', '.cpp', '.hpp', '.c', '.h', '.cs', '.go', '.rs', '.tf', '.sh'
+            '.ipynb', '.cpp', '.hpp', '.c', '.h', '.cs', '.go', '.rs', '.tf', '.sh', '.sql'
         )
         text_paths = [p for p in tree_paths if p.endswith(valid_extensions) or '.' not in p.split('/')[-1]]
         

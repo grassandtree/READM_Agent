@@ -18,7 +18,7 @@ def main():
         print("필수 API 키가 설정되지 않았습니다. .env 파일을 확인하세요.")
         return
         
-    TARGET_REPO = "tishakong/SMWU_CG_LAB01" # 분석 레포 설정
+    TARGET_REPO = "grassandtree/treevia" # 분석 레포 설정
     MODEL = "gemini-2.5-flash"
 
     print(f"[README 생성 에이전트] '{TARGET_REPO}' 분석을 시작합니다.\n")
@@ -28,7 +28,7 @@ def main():
         repo_mgr = RepoManagerAgent(token=github_token, api_key=gemini_api_key, model=MODEL)
         analyst = AnalystAgent(api_key=gemini_api_key, model=MODEL)
         tech_exp = TechExpertAgent(api_key=gemini_api_key, model=MODEL)
-        writer = WriterAgent(api_key=gemini_api_key, model=MODEL, mode="portfolio")
+        writer = WriterAgent(api_key=gemini_api_key, model=MODEL, mode="professional")   ## portfolio")
 
         # ---------------------------------------------------------
         # Step 1: RepoManager - 데이터 추출
